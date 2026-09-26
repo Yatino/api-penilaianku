@@ -137,7 +137,7 @@
         <div class="p-4 border-t border-slate-200">
             <div class="flex items-center text-sm text-slate-500">
                 <div class="w-2 h-2 rounded-full mr-2" id="db-status-indicator" style="background-color: #eab308;"></div>
-                <span id="db-status-text">Local Mode</span>
+                <span id="db-status-text">Menghubungkan...</span>
             </div>
         </div>
     </aside>
@@ -206,7 +206,7 @@
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
                     <h3 class="text-lg font-bold text-slate-800 mb-4">Selamat Datang di E-Penilaian</h3>
-                    <p class="text-slate-600 mb-4">Aplikasi ini dirancang untuk memudahkan guru dalam melakukan penilaian formatif dan sumatif secara kolektif. Data dapat disimpan secara lokal atau dihubungkan ke Google Spreadsheet.</p>
+                    <p class="text-slate-600 mb-4">Aplikasi ini dirancang untuk memudahkan guru dalam melakukan penilaian formatif dan sumatif secara kolektif. Data otomatis terhubung langsung dan tersimpan secara real-time di Google Spreadsheet Anda.</p>
                     
                     <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-4">
                         <h4 class="font-semibold text-blue-800 mb-2"><i class="fas fa-info-circle mr-2"></i>Petunjuk Penggunaan:</h4>
@@ -214,7 +214,7 @@
                             <li>Masuk ke menu <strong>Data Siswa</strong> untuk menambahkan daftar murid.</li>
                             <li>Buka menu <strong>Input Nilai</strong> untuk memasukkan nilai secara kolektif (UH, TH, US).</li>
                             <li>Lihat hasil akhir dan predikat pada menu <strong>Rekapan Nilai</strong>.</li>
-                            <li>Ke menu <strong>Pengaturan</strong> untuk menghubungkan aplikasi ke Google Sheets.</li>
+                            <li>Setiap ada perubahan, tekan tombol <strong>Sinkron Cloud</strong> atau ikon sync di kanan atas untuk menyimpan ke Google Sheets.</li>
                         </ol>
                     </div>
                 </div>
@@ -370,7 +370,7 @@
                     <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2"><i class="fas fa-database text-blue-600 mr-2"></i>Koneksi Google Sheets (Database)</h3>
                     
                     <p class="text-sm text-slate-600 mb-4">
-                        Secara default, data disimpan di browser (Local Storage). Untuk menyimpan data di Google Sheets agar aman dan bisa diakses dari perangkat lain, masukkan URL Web App Google Apps Script Anda.
+                        Aplikasi ini telah terhubung langsung ke Google Spreadsheet Anda. Jika ingin mengganti URL Web App dengan sheet lain, Anda dapat mengubahnya di bawah.
                     </p>
 
                     <div class="mb-4">
@@ -382,127 +382,17 @@
                             </button>
                         </div>
                     </div>
-
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800 mt-6">
-                        <h4 class="font-bold mb-2">Cara Setup Google Sheets (Format Tabel Rapi):</h4>
-                        <ol class="list-decimal list-inside space-y-2">
-                            <li>Buat <a href="https://sheets.new" target="_blank" class="text-blue-600 underline">Google Spreadsheet baru</a> (atau gunakan yang sudah ada, data lama di sheet pertama abaikan saja).</li>
-                            <li>Buka menu <strong>Ekstensi > Apps Script</strong>.</li>
-                            <li>Hapus semua kode lama, lalu Salin dan tempel kode <strong>Apps Script BARU</strong> di bawah ini.</li>
-                            <li>Simpan, lalu klik <strong>Terapkan (Deploy) > Deployment baru</strong>. (Jangan pilih kelola deployment untuk memastikan URL baru aktif dengan benar).</li>
-                            <li>Pilih jenis <strong>Aplikasi Web</strong>. Deskripsi: "API Penilaian V2".</li>
-                            <li>Jalankan sebagai: <strong>Saya</strong>. Yang memiliki akses: <strong>Siapa saja (Anyone)</strong>.</li>
-                            <li>Klik Terapkan, salin <strong>URL Aplikasi Web</strong> yang baru, dan paste di kolom atas.</li>
-                        </ol>
-                        <p class="mt-3 text-xs text-yellow-700 italic border-t border-yellow-200 pt-2"><i class="fas fa-magic mr-1"></i> <strong>Penting:</strong> Kode baru ini akan memisahkan data secara otomatis ke dalam sheet "Siswa", "Pelajaran", "Nilai", dan "Pengaturan" agar mudah dibaca seperti tabel biasa.</p>
-                    </div>
-
-                    <div class="mt-4">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-sm font-medium text-slate-700">Kode Apps Script Baru:</span>
-                            <button onclick="copyScript()" class="text-xs text-blue-600 hover:text-blue-800"><i class="fas fa-copy mr-1"></i>Copy Code</button>
-                        </div>
-                        <pre class="bg-slate-800 text-slate-200 p-4 rounded-lg text-xs overflow-x-auto custom-scrollbar" id="script-code" style="max-height: 250px;">
-// === PASTE KODE INI DI GOOGLE APPS SCRIPT ===
-
-function doPost(e) {
-  try {
-    if (!e || !e.postData || !e.postData.contents) return createResponse({ status: 'error', message: 'Tidak ada data.' });
-    var data = JSON.parse(e.postData.contents);
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    if (!ss) return createResponse({ status: 'error', message: 'Spreadsheet tidak ditemukan.' });
-
-    var shStudents = ss.getSheetByName('Siswa') || ss.insertSheet('Siswa');
-    shStudents.clear();
-    var studentRows = [['ID', 'NIS/NISN', 'Nama Lengkap', 'Gender']];
-    if (data.students && data.students.length > 0) data.students.forEach(function(s) { studentRows.push([s.id, s.nis, s.name, s.gender]); });
-    shStudents.getRange(1, 1, studentRows.length, studentRows[0].length).setValues(studentRows);
-    
-    var shSubjects = ss.getSheetByName('Pelajaran') || ss.insertSheet('Pelajaran');
-    shSubjects.clear();
-    var subjectRows = [['ID', 'Nama Mata Pelajaran', 'Capaian Pembelajaran']];
-    if (data.subjects && data.subjects.length > 0) data.subjects.forEach(function(s) { subjectRows.push([s.id, s.name, s.target]); });
-    shSubjects.getRange(1, 1, subjectRows.length, subjectRows[0].length).setValues(subjectRows);
-
-    var shGrades = ss.getSheetByName('Nilai') || ss.insertSheet('Nilai');
-    shGrades.clear();
-    var gradeRows = [['ID Mapel', 'ID Siswa', 'Tipe Nilai', 'Nilai 1', 'Nilai 2', 'Nilai 3', 'Nilai 4', 'Nilai 5', 'Nilai 6', 'Nilai 7', 'Nilai 8', 'Nilai 9', 'Nilai 10']];
-    if (data.grades) {
-        for (var mapelId in data.grades) {
-            for (var tipe in data.grades[mapelId]) {
-                for (var siswaId in data.grades[mapelId][tipe]) {
-                    var val = data.grades[mapelId][tipe][siswaId];
-                    var row = [mapelId, siswaId, tipe.toUpperCase()];
-                    if (tipe === 'us') { row.push(val !== undefined ? val : ''); while(row.length < 13) row.push('');
-                    } else { if (Array.isArray(val)) { for(var i=0; i<10; i++) { row.push(val[i] !== undefined && val[i] !== '' ? val[i] : ''); }
-                    } else { while(row.length < 13) row.push(''); } }
-                    gradeRows.push(row);
-                }
-            }
-        }
-    }
-    shGrades.getRange(1, 1, gradeRows.length, gradeRows[0].length).setValues(gradeRows);
-    
-    var shSettings = ss.getSheetByName('Pengaturan') || ss.insertSheet('Pengaturan');
-    shSettings.clear();
-    var settingsRows = [['Pengaturan', 'Nilai'],['uhCount', data.settings ? data.settings.uhCount : 4],['thCount', data.settings ? data.settings.thCount : 4],['gasUrl', data.settings ? data.settings.gasUrl : '']];
-    shSettings.getRange(1, 1, settingsRows.length, settingsRows[0].length).setValues(settingsRows);
-    return createResponse({ status: 'success', message: 'Data berhasil disimpan.' });
-  } catch (error) { return createResponse({ status: 'error', message: error.toString() }); }
-}
-
-function doGet(e) {
-  try {
-      var ss = SpreadsheetApp.getActiveSpreadsheet();
-      var appData = { students: [], subjects: [], grades: {}, settings: { uhCount: 4, thCount: 4, gasUrl: '' } };
-      
-      var shStudents = ss.getSheetByName('Siswa');
-      if (shStudents && shStudents.getLastRow() > 1) { var dataS = shStudents.getRange(2, 1, shStudents.getLastRow() - 1, 4).getValues();
-          for(var i=0; i<dataS.length; i++) { if(dataS[i][0]) appData.students.push({ id: dataS[i][0], nis: String(dataS[i][1]), name: dataS[i][2], gender: dataS[i][3] }); }
-      }
-
-      var shSubjects = ss.getSheetByName('Pelajaran');
-      if (shSubjects && shSubjects.getLastRow() > 1) { var dataSub = shSubjects.getRange(2, 1, shSubjects.getLastRow() - 1, 3).getValues();
-          for(var i=0; i<dataSub.length; i++) { if(dataSub[i][0]) appData.subjects.push({ id: dataSub[i][0], name: dataSub[i][1], target: dataSub[i][2] }); }
-      }
-
-      var shSettings = ss.getSheetByName('Pengaturan');
-      if (shSettings && shSettings.getLastRow() > 1) { var dataSet = shSettings.getRange(2, 1, shSettings.getLastRow() - 1, 2).getValues();
-          for(var i=0; i<dataSet.length; i++) { if (dataSet[i][0] === 'uhCount') appData.settings.uhCount = Number(dataSet[i][1]);
-              if (dataSet[i][0] === 'thCount') appData.settings.thCount = Number(dataSet[i][1]);
-              if (dataSet[i][0] === 'gasUrl') appData.settings.gasUrl = dataSet[i][1]; }
-      }
-
-      var shGrades = ss.getSheetByName('Nilai');
-      if (shGrades && shGrades.getLastRow() > 1) { var dataG = shGrades.getRange(2, 1, shGrades.getLastRow() - 1, 13).getValues();
-          for(var i=0; i<dataG.length; i++) { var mapelId = dataG[i][0], siswaId = dataG[i][1], tipe = String(dataG[i][2]).toLowerCase();
-              if (!mapelId || !siswaId || !tipe) continue;
-              if (!appData.grades[mapelId]) appData.grades[mapelId] = { uh: {}, th: {}, us: {} };
-              if (!appData.grades[mapelId][tipe]) appData.grades[mapelId][tipe] = {};
-              if (tipe === 'us') { appData.grades[mapelId][tipe][siswaId] = dataG[i][3] !== '' ? dataG[i][3] : '';
-              } else { var arr = []; var count = tipe === 'uh' ? appData.settings.uhCount : appData.settings.thCount;
-                  for(var j=0; j<count; j++) { arr.push(dataG[i][3+j] !== '' ? dataG[i][3+j] : ''); }
-                  appData.grades[mapelId][tipe][siswaId] = arr; } }
-      }
-      return createResponse(appData);
-  } catch (error) { return createResponse({ status: 'error', message: error.toString() }); }
-}
-
-function doOptions(e) { return createResponse({}); }
-function createResponse(payload) { return ContentService.createTextOutput(JSON.stringify(payload)).setMimeType(ContentService.MimeType.JSON).setHeader("Access-Control-Allow-Origin", "*").setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS").setHeader("Access-Control-Allow-Headers", "Content-Type"); }
-                        </pre>
-                    </div>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
                      <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2"><i class="fas fa-sliders-h text-blue-600 mr-2"></i>Pengaturan Sistem</h3>
                      <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Jumlah UH (Maks 10)</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Jumlah Kolom UH (Maks 10)</label>
                             <input type="number" id="setting-uh-count" value="4" min="1" max="10" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Jumlah TH (Maks 10)</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Jumlah Kolom TH (Maks 10)</label>
                             <input type="number" id="setting-th-count" value="4" min="1" max="10" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
                         </div>
                         <button onclick="saveSettings()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full">
@@ -587,6 +477,9 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
     <div id="toast">Message goes here</div>
 
     <script>
+        // URL Google Apps Script bawaan (Default Cloud URL)
+        const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbwJvX7S3SQzC-0LstOguGukOC2ofqlIYLDIe8pk7uej2gYclvPGQirm1l-ZbOGrWad4Ug/exec';
+
         // --- State Management ---
         let appData = {
             students: [],
@@ -594,12 +487,12 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                 { id: 'default', name: 'Mata Pelajaran Umum', target: 'Capaian pembelajaran belum ditentukan.' }
             ],
             grades: {
-                'default': { uh: {}, th: {}, us: {} } // structure: { subjectId: { uh: { studentId: [...] } } }
+                'default': { uh: {}, th: {}, us: {} }
             },
             settings: {
                 uhCount: 4,
                 thCount: 4,
-                gasUrl: ''
+                gasUrl: DEFAULT_GAS_URL
             }
         };
 
@@ -609,21 +502,20 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
             loadLocalData();
+            
+            // Pastikan URL terpasang otomatis
+            if (!appData.settings.gasUrl) {
+                appData.settings.gasUrl = DEFAULT_GAS_URL;
+            }
+
             updateSubjectDropdowns();
             setupNavigation();
             setupKeyboardNavigation();
             
-            // Try fetching from cloud if URL exists
-            if(appData.settings.gasUrl) {
-                syncData(true); // silent fetch on load
-            } else {
-                updateDashboardStats();
-                renderStudentTable();
-                renderGradingTable();
-                updateDbStatus();
-            }
+            // Ambil data langsung dari Google Spreadsheet saat pertama dibuka
+            syncData(true);
 
-            // Bind inputs to settings view
+            // Bind inputs
             document.getElementById('setting-uh-count').value = appData.settings.uhCount;
             document.getElementById('setting-th-count').value = appData.settings.thCount;
             document.getElementById('gas-url-input').value = appData.settings.gasUrl;
@@ -639,7 +531,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     
-                    // Update active nav state
                     navLinks.forEach(n => {
                         n.classList.remove('bg-blue-50', 'text-blue-600', 'font-semibold', 'border-r-4', 'border-blue-600');
                         n.classList.add('text-slate-600');
@@ -648,7 +539,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                     link.classList.remove('text-slate-600');
                     link.classList.add('bg-blue-50', 'text-blue-600', 'font-semibold', 'border-r-4', 'border-blue-600');
 
-                    // Switch view
                     const target = link.getAttribute('data-target');
                     views.forEach(v => v.classList.add('hidden'));
                     
@@ -656,14 +546,12 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                     if(targetView) {
                         targetView.classList.remove('hidden');
                         if (target === 'grading' || target === 'recap') {
-                            targetView.classList.add('flex'); // Keep flex layout
+                            targetView.classList.add('flex');
                         }
                     }
 
-                    // Update Title
                     pageTitle.innerText = link.innerText.trim();
 
-                    // Specific view renders
                     if(target === 'dashboard') updateDashboardStats();
                     if(target === 'students') renderStudentTable();
                     if(target === 'subjects') renderSubjectTable();
@@ -672,7 +560,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                 });
             });
 
-            // Set default active
             navLinks[0].click();
         }
 
@@ -684,14 +571,12 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                     const parsed = JSON.parse(saved);
                     appData = { ...appData, ...parsed };
                     
-                    // Migration: If old data structure without subjects exists, migrate to default subject
                     if (appData.grades.uh && !appData.subjects) {
                         const oldGrades = { uh: appData.grades.uh, th: appData.grades.th, us: appData.grades.us };
                         appData.subjects = [{ id: 'default', name: 'Mata Pelajaran Umum', target: '-' }];
                         appData.grades = { 'default': oldGrades };
                     }
                     
-                    // Ensure structural integrity
                     if (!appData.subjects || appData.subjects.length === 0) {
                         appData.subjects = [{ id: 'default', name: 'Mata Pelajaran Umum', target: '-' }];
                         appData.grades = { 'default': { uh: {}, th: {}, us: {} } };
@@ -700,7 +585,7 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                         activeSubjectId = appData.subjects[0].id;
                     }
 
-                    appData.settings = appData.settings || { uhCount: 4, thCount: 4, gasUrl: '' };
+                    appData.settings = appData.settings || { uhCount: 4, thCount: 4, gasUrl: DEFAULT_GAS_URL };
                 } catch (e) {
                     console.error("Error loading local data", e);
                 }
@@ -709,21 +594,14 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
 
         function saveLocalData() {
             localStorage.setItem('ePenilaianData', JSON.stringify(appData));
-            updateDashboardStats(); // Refresh stats whenever data changes
+            updateDashboardStats();
         }
 
         async function syncData(silent = false) {
-            if (!appData.settings.gasUrl) {
-                if(!silent) showToast("URL Google Sheets belum diatur di Pengaturan.", "error");
-                updateDbStatus();
-                return;
-            }
-
-            let url = appData.settings.gasUrl.trim();
+            let url = (appData.settings.gasUrl || DEFAULT_GAS_URL).trim();
             
-            // Validasi format URL Dasar
             if (!url.includes('script.google.com') || !url.includes('/exec')) {
-                if(!silent) showToast("URL tidak valid! Pastikan URL Web App berakhiran /exec", "error");
+                if(!silent) showToast("URL tidak valid! Pastikan berakhiran /exec", "error");
                 updateDbStatus(false);
                 return;
             }
@@ -734,22 +612,30 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
 
             try {
                 if (silent) {
-                    // Fetch on load (GET)
-                    const res = await fetch(url + "?method=get", { 
-                        method: 'GET' 
-                    });
+                    // Fetch data dari Google Sheets (GET)
+                    const res = await fetch(url, { method: 'GET' });
                     if(res.ok) {
                         const cloudData = await res.json();
-                        if (cloudData && cloudData.students && cloudData.students.length > 0) {
-                             appData = cloudData; 
-                             saveLocalData();
+                        if (cloudData && (cloudData.students || cloudData.subjects)) {
+                            appData.students = cloudData.students || [];
+                            appData.subjects = (cloudData.subjects && cloudData.subjects.length > 0) ? cloudData.subjects : appData.subjects;
+                            appData.grades = cloudData.grades || appData.grades;
+                            if (cloudData.settings) {
+                                appData.settings.uhCount = cloudData.settings.uhCount || appData.settings.uhCount;
+                                appData.settings.thCount = cloudData.settings.thCount || appData.settings.thCount;
+                            }
+                            
+                            if (appData.subjects.length > 0 && !appData.subjects.find(s => s.id === activeSubjectId)) {
+                                activeSubjectId = appData.subjects[0].id;
+                            }
+                            
+                            saveLocalData();
                         }
                     }
                 } else {
-                    // Push (Save Manual action - POST)
+                    // Push data ke Google Sheets (POST)
                     const payload = JSON.stringify(appData);
                     
-                    // Menghilangkan headers custom untuk menghindari preflight CORS
                     const response = await fetch(url, {
                         method: 'POST',
                         body: payload
@@ -767,14 +653,15 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             } catch (error) {
                 console.error("Sync error:", error);
                 if(!silent) {
-                    showToast("Gagal! Pastikan URL benar & Akses diset ke 'Siapa Saja' (Anyone).", "error");
+                    showToast("Gagal sinkronisasi data dengan Google Sheets.", "error");
                 }
                 updateDbStatus(false);
             } finally {
                 if(!silent) hideLoading();
                 syncIcon.classList.remove('fa-spin');
-                // Re-render current view based on active tab
-                const activeNav = document.querySelector('.nav-link.bg-blue-50').getAttribute('data-target');
+                
+                updateSubjectDropdowns();
+                const activeNav = document.querySelector('.nav-link.bg-blue-50')?.getAttribute('data-target');
                 if(activeNav === 'dashboard') updateDashboardStats();
                 if(activeNav === 'students') renderStudentTable();
                 if(activeNav === 'subjects') renderSubjectTable();
@@ -787,17 +674,12 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             const indicator = document.getElementById('db-status-indicator');
             const text = document.getElementById('db-status-text');
             
-            if (appData.settings.gasUrl) {
-                if(isCloud) {
-                    indicator.style.backgroundColor = '#22c55e'; // Green
-                    text.innerText = 'Tersinkron (Google Sheets)';
-                } else {
-                    indicator.style.backgroundColor = '#f59e0b'; // Yellow warning
-                    text.innerText = 'Koneksi Sheets Bermasalah';
-                }
+            if (isCloud) {
+                indicator.style.backgroundColor = '#22c55e'; // Green
+                text.innerText = 'Tersinkron (Google Sheets)';
             } else {
-                indicator.style.backgroundColor = '#3b82f6'; // Blue
-                text.innerText = 'Mode Lokal (Browser)';
+                indicator.style.backgroundColor = '#f59e0b'; // Yellow
+                text.innerText = 'Mode Lokal (Offline)';
             }
         }
 
@@ -870,14 +752,12 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             }
 
             if(id) {
-                // Update
                 const index = appData.students.findIndex(s => s.id === id);
                 if(index > -1) {
                     appData.students[index] = { id, nis, name, gender };
                     showToast("Data siswa diperbarui");
                 }
             } else {
-                // Add new
                 const newId = 'std_' + Date.now().toString(36) + Math.random().toString(36).substr(2);
                 appData.students.push({ id: newId, nis, name, gender });
                 showToast("Siswa berhasil ditambahkan");
@@ -886,9 +766,7 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             saveLocalData();
             renderStudentTable();
             closeStudentModal();
-            
-            // Auto sync if configured
-            if(appData.settings.gasUrl) syncData(true);
+            syncData();
         }
 
         function editStudent(id) {
@@ -906,7 +784,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
         function deleteStudent(id) {
             appData.students = appData.students.filter(s => s.id !== id);
             
-            // Clean up grades across all subjects
             Object.keys(appData.grades).forEach(subjId => {
                 delete appData.grades[subjId].uh[id];
                 delete appData.grades[subjId].th[id];
@@ -916,8 +793,7 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             saveLocalData();
             renderStudentTable();
             showToast("Siswa dihapus");
-            
-            if(appData.settings.gasUrl) syncData(true);
+            syncData();
         }
 
         // --- Subject Management ---
@@ -1005,19 +881,16 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             }
 
             if(id) {
-                // Update
                 const index = appData.subjects.findIndex(s => s.id === id);
                 if(index > -1) {
                     appData.subjects[index] = { id, name, target };
                     showToast("Mata Pelajaran diperbarui");
                 }
             } else {
-                // Add new
                 const newId = 'sub_' + Date.now().toString(36);
                 appData.subjects.push({ id: newId, name, target });
                 appData.grades[newId] = { uh: {}, th: {}, us: {} };
                 
-                // If it's the only real subject (replacing default)
                 if (appData.subjects.length === 2 && appData.subjects[0].id === 'default' && !Object.keys(appData.grades['default'].us).length) {
                     appData.subjects.shift();
                     delete appData.grades['default'];
@@ -1032,8 +905,7 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             saveLocalData();
             renderSubjectTable();
             closeSubjectModal();
-            
-            if(appData.settings.gasUrl) syncData(true);
+            syncData();
         }
 
         function editSubject(id) {
@@ -1064,15 +936,13 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             saveLocalData();
             renderSubjectTable();
             showToast("Mata Pelajaran dihapus");
-            
-            if(appData.settings.gasUrl) syncData(true);
+            syncData();
         }
 
         // --- Grading System ---
         function switchGradeTab(tab) {
             currentGradeTab = tab;
             
-            // Update UI tabs
             const buttons = document.querySelectorAll('#view-grading button[onclick^="switchGradeTab"]');
             buttons.forEach(btn => {
                 btn.classList.remove('tab-active', 'text-blue-600');
@@ -1098,7 +968,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                 return;
             }
 
-            // Build Headers
             let headersHTML = `
                 <th class="p-3 font-semibold text-slate-600 text-sm w-12 text-center border-r border-slate-200 bg-slate-50 sticky left-0 z-10">No</th>
                 <th class="p-3 font-semibold text-slate-600 text-sm border-r border-slate-200 bg-slate-50 sticky left-[48px] z-10 min-w-[200px] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Nama Siswa</th>
@@ -1119,10 +988,8 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             }
             thead.innerHTML = headersHTML;
 
-            // Build Rows
             tbody.innerHTML = '';
             
-            // Ensure current active subject exists in grades object
             if (!appData.grades[activeSubjectId]) {
                 appData.grades[activeSubjectId] = { uh: {}, th: {}, us: {} };
             }
@@ -1136,7 +1003,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                     <td class="p-2 text-sm font-medium text-slate-800 border-r border-slate-100 bg-white group-hover:bg-blue-50/50 sticky left-[48px] z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] truncate">${student.name}</td>
                 `;
 
-                // Initialize grades array for student under active subject if not exists
                 if (!appData.grades[activeSubjectId][currentGradeTab][student.id]) {
                     if (currentGradeTab === 'us') {
                         appData.grades[activeSubjectId][currentGradeTab][student.id] = '';
@@ -1190,7 +1056,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             const index = parseInt(inputElement.getAttribute('data-index'));
             let value = inputElement.value;
 
-            // Validate 0-100
             if (value !== '') {
                 value = Math.max(0, Math.min(100, parseFloat(value)));
                 inputElement.value = value;
@@ -1201,7 +1066,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             if (type === 'us') {
                 appData.grades[activeSubjectId][type][studentId] = value;
             } else {
-                // Ensure array size matches settings
                 const expectedLength = type === 'uh' ? appData.settings.uhCount : appData.settings.thCount;
                 if(!appData.grades[activeSubjectId][type][studentId] || appData.grades[activeSubjectId][type][studentId].length !== expectedLength) {
                     let current = appData.grades[activeSubjectId][type][studentId] || [];
@@ -1210,7 +1074,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                 
                 appData.grades[activeSubjectId][type][studentId][index] = value;
                 
-                // Update average instantly
                 let total = 0, count = 0;
                 appData.grades[activeSubjectId][type][studentId].forEach(val => {
                     if (val !== '') { total += parseFloat(val); count++; }
@@ -1221,10 +1084,9 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                 }
             }
 
-            saveLocalData(); // Save on every change locally
+            saveLocalData();
         }
 
-        // Arrow key / Enter navigation in table
         function setupKeyboardNavigation() {
             document.addEventListener('keydown', function(e) {
                 if(e.target.classList.contains('grade-input')) {
@@ -1253,8 +1115,7 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
 
         function saveAllGrades() {
             saveLocalData();
-            showToast("Nilai berhasil disimpan lokal.");
-            if(appData.settings.gasUrl) syncData();
+            syncData();
         }
 
         // --- Recap & Calculations ---
@@ -1270,7 +1131,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             const thAvg = getAvg('th');
             const usVal = parseFloat(appData.grades[activeSubjectId]?.us?.[studentId]) || 0;
 
-            // Formula: 30% UH + 20% TH + 50% US
             const finalGrade = (uhAvg * 0.3) + (thAvg * 0.2) + (usVal * 0.5);
             
             let predikat = 'E';
@@ -1295,7 +1155,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             const activeSubject = appData.subjects.find(s => s.id === activeSubjectId);
             const subjectName = activeSubject ? activeSubject.name : '-';
 
-            // Sort alphabetically for recap
             const sortedStudents = [...appData.students].sort((a,b) => a.name.localeCompare(b.name));
 
             sortedStudents.forEach((student, index) => {
@@ -1392,7 +1251,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             appData.settings.uhCount = parseInt(document.getElementById('setting-uh-count').value) || 4;
             appData.settings.thCount = parseInt(document.getElementById('setting-th-count').value) || 4;
             
-            // Re-normalize grade arrays if counts change (truncate or pad)
             appData.students.forEach(s => {
                 Object.keys(appData.grades).forEach(subjId => {
                     const uh = appData.grades[subjId].uh[s.id] || [];
@@ -1405,33 +1263,23 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
 
             saveLocalData();
             showToast("Pengaturan berhasil disimpan");
+            syncData();
         }
 
         function saveGasUrl() {
             let url = document.getElementById('gas-url-input').value.trim();
             
-            // Auto-correct jika user tidak sengaja copy URL yang berakhiran /edit
             if (url.endsWith('/edit')) {
                 url = url.replace('/edit', '/exec');
                 document.getElementById('gas-url-input').value = url;
             }
 
-            appData.settings.gasUrl = url;
+            appData.settings.gasUrl = url || DEFAULT_GAS_URL;
             saveLocalData();
-            
-            if (url) {
-                syncData(); // Test connection
-            } else {
-                updateDbStatus();
-                showToast("URL dihapus. Aplikasi kembali ke mode lokal murni.");
-            }
+            syncData();
         }
 
         function clearLocalData() {
-            // Using a simple prompt as requested replacement for confirm
-            // Although custom UI modal is better, keeping it simple for code length.
-            // Note: Since rules say "never use confirm", I will build a simple custom prompt modal logic conceptually, but for simplicity will just require double tap.
-            
             let btn = event.currentTarget;
             if(btn.innerText.includes("Yakin?")) {
                 localStorage.removeItem('ePenilaianData');
@@ -1439,22 +1287,20 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                     students: [], 
                     subjects: [{ id: 'default', name: 'Mata Pelajaran Umum', target: '-' }],
                     grades: { 'default': { uh: {}, th: {}, us: {} } }, 
-                    settings: { uhCount: 4, thCount: 4, gasUrl: '' } 
+                    settings: { uhCount: 4, thCount: 4, gasUrl: DEFAULT_GAS_URL } 
                 };
                 activeSubjectId = 'default';
                 btn.innerHTML = `<i class="fas fa-trash-alt mr-2"></i> Hapus Semua Data Lokal (Reset)`;
                 btn.classList.remove('text-red-800', 'font-bold');
                 
-                // Re-render
                 document.getElementById('setting-uh-count').value = 4;
                 document.getElementById('setting-th-count').value = 4;
-                document.getElementById('gas-url-input').value = '';
+                document.getElementById('gas-url-input').value = DEFAULT_GAS_URL;
                 
                 updateSubjectDropdowns();
                 saveLocalData();
                 showToast("Semua data telah direset.");
                 
-                // Refresh active view
                 document.querySelector('.nav-link.bg-blue-50').click();
             } else {
                 btn.innerText = "Yakin? Klik lagi untuk menghapus permanen!";
@@ -1464,29 +1310,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
                     btn.classList.remove('text-red-800', 'font-bold');
                 }, 3000);
             }
-        }
-
-        function copyScript() {
-            const text = document.getElementById('script-code').innerText;
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            
-            try {
-                // Try modern clipboard first
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(text).then(() => showToast("Kode disalin ke clipboard"));
-                } else {
-                    // Fallback for older environments or iframes
-                    document.execCommand('copy');
-                    showToast("Kode disalin ke clipboard");
-                }
-            } catch (err) {
-                console.error('Failed to copy', err);
-            }
-            
-            document.body.removeChild(textArea);
         }
 
         // --- UI Helpers ---
@@ -1518,7 +1341,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             }
         });
 
-        // Close sidebar on mobile when clicking a link
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', () => {
                 if(window.innerWidth < 768) {
@@ -1527,7 +1349,6 @@ function createResponse(payload) { return ContentService.createTextOutput(JSON.s
             });
         });
         
-        // Initial setup for mobile sidebar hiding
         window.addEventListener('resize', () => {
             const sidebar = document.getElementById('sidebar');
             if(window.innerWidth >= 768) {
