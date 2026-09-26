@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Custom Styles for better aesthetics */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
         body {
@@ -15,7 +14,6 @@
             background-color: #f3f4f6;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -31,7 +29,6 @@
             background: #94a3b8; 
         }
 
-        /* Table Inputs */
         .grade-input {
             width: 100%;
             border: 1px solid transparent;
@@ -52,7 +49,6 @@
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         }
         
-        /* Hide number input arrows */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
@@ -144,8 +140,6 @@
 
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50 relative">
-        
-        <!-- Header -->
         <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0">
             <div class="flex items-center">
                 <button id="mobile-menu-btn" class="md:hidden mr-4 text-slate-500 hover:text-slate-800 focus:outline-none">
@@ -163,10 +157,7 @@
             </div>
         </header>
 
-        <!-- Content Area -->
         <div class="flex-1 overflow-y-auto p-6 relative">
-            
-            <!-- Loading Overlay -->
             <div id="loading-overlay" class="absolute inset-0 bg-white/80 z-40 flex flex-col items-center justify-center hidden backdrop-blur-sm">
                 <i class="fas fa-circle-notch fa-spin text-4xl text-blue-600 mb-4"></i>
                 <p class="text-slate-600 font-medium" id="loading-text">Memproses data...</p>
@@ -206,17 +197,7 @@
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
                     <h3 class="text-lg font-bold text-slate-800 mb-4">Selamat Datang di E-Penilaian</h3>
-                    <p class="text-slate-600 mb-4">Aplikasi ini dirancang untuk memudahkan guru dalam melakukan penilaian formatif dan sumatif secara kolektif. Data otomatis terhubung langsung dan tersimpan secara real-time di Google Spreadsheet Anda.</p>
-                    
-                    <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-4">
-                        <h4 class="font-semibold text-blue-800 mb-2"><i class="fas fa-info-circle mr-2"></i>Petunjuk Penggunaan:</h4>
-                        <ol class="list-decimal list-inside text-blue-700 space-y-1 text-sm">
-                            <li>Masuk ke menu <strong>Data Siswa</strong> untuk menambahkan daftar murid.</li>
-                            <li>Buka menu <strong>Input Nilai</strong> untuk memasukkan nilai secara kolektif (UH, TH, US).</li>
-                            <li>Lihat hasil akhir dan predikat pada menu <strong>Rekapan Nilai</strong>.</li>
-                            <li>Setiap ada perubahan, tekan tombol <strong>Sinkron Cloud</strong> atau ikon sync di kanan atas untuk menyimpan ke Google Sheets.</li>
-                        </ol>
-                    </div>
+                    <p class="text-slate-600 mb-4">Aplikasi ini tersimpan otomatis secara terhubung ke Google Spreadsheet Anda.</p>
                 </div>
             </div>
 
@@ -243,9 +224,7 @@
                                     <th class="p-4 font-semibold text-slate-600 text-sm w-24 text-center">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="student-table-body" class="divide-y divide-slate-100">
-                                <!-- Student rows will be injected here -->
-                            </tbody>
+                            <tbody id="student-table-body" class="divide-y divide-slate-100"></tbody>
                         </table>
                     </div>
                 </div>
@@ -273,9 +252,7 @@
                                     <th class="p-4 font-semibold text-slate-600 text-sm w-24 text-center">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="subject-table-body" class="divide-y divide-slate-100">
-                                <!-- Subject rows will be injected here -->
-                            </tbody>
+                            <tbody id="subject-table-body" class="divide-y divide-slate-100"></tbody>
                         </table>
                     </div>
                 </div>
@@ -283,7 +260,6 @@
 
             <!-- Grading View -->
             <div id="view-grading" class="view-section hidden flex-col h-full">
-                <!-- Sub Navigation for Grading -->
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-200 mb-4 bg-white rounded-t-xl px-4 py-2 space-y-3 md:space-y-0">
                     <div class="flex space-x-1">
                         <button class="px-3 md:px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-800 tab-active" onclick="switchGradeTab('uh')">Ulangan Harian (UH)</button>
@@ -307,13 +283,9 @@
                     <div class="overflow-auto flex-1 custom-scrollbar relative">
                         <table class="w-full text-left border-collapse min-w-max">
                             <thead>
-                                <tr id="grading-table-head" class="bg-slate-50 border-b border-slate-200">
-                                    <!-- Headers injected via JS -->
-                                </tr>
+                                <tr id="grading-table-head" class="bg-slate-50 border-b border-slate-200"></tr>
                             </thead>
-                            <tbody id="grading-table-body" class="divide-y divide-slate-100">
-                                <!-- Rows injected via JS -->
-                            </tbody>
+                            <tbody id="grading-table-body" class="divide-y divide-slate-100"></tbody>
                         </table>
                     </div>
                 </div>
@@ -331,9 +303,6 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-4">
-                            <div class="text-xs text-slate-500 hidden lg:block">
-                                Bobot: Rata² UH (30%) + Rata² TH (20%) + US (50%)
-                            </div>
                             <button onclick="exportToCSV()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center">
                                 <i class="fas fa-download mr-2"></i> Export CSV
                             </button>
@@ -348,16 +317,14 @@
                                     <th class="p-3 font-semibold text-slate-700 text-xs border-r border-white min-w-[150px]">Nama Siswa</th>
                                     <th class="p-3 font-semibold text-slate-700 text-xs text-center border-r border-white w-16">L/P</th>
                                     <th class="p-3 font-semibold text-slate-700 text-xs border-r border-white min-w-[120px]">Mata Pelajaran</th>
-                                    <th class="p-3 font-semibold text-slate-700 text-xs text-center border-r border-white bg-blue-50 w-24">Rata² UH<br><span class="font-normal">(30%)</span></th>
-                                    <th class="p-3 font-semibold text-slate-700 text-xs text-center border-r border-white bg-green-50 w-24">Rata² TH<br><span class="font-normal">(20%)</span></th>
-                                    <th class="p-3 font-semibold text-slate-700 text-xs text-center border-r border-white bg-orange-50 w-24">Nilai US<br><span class="font-normal">(50%)</span></th>
-                                    <th class="p-3 font-semibold text-slate-800 text-sm text-center border-r border-slate-200 bg-slate-200 w-24">Nilai<br>Akhir</th>
+                                    <th class="p-3 font-semibold text-slate-700 text-xs text-center border-r border-white bg-blue-50 w-24">Rata² UH</th>
+                                    <th class="p-3 font-semibold text-slate-700 text-xs text-center border-r border-white bg-green-50 w-24">Rata² TH</th>
+                                    <th class="p-3 font-semibold text-slate-700 text-xs text-center border-r border-white bg-orange-50 w-24">Nilai US</th>
+                                    <th class="p-3 font-semibold text-slate-800 text-sm text-center border-r border-slate-200 bg-slate-200 w-24">Nilai Akhir</th>
                                     <th class="p-3 font-semibold text-slate-800 text-sm text-center bg-slate-200 w-20">Predikat</th>
                                 </tr>
                             </thead>
-                            <tbody id="recap-table-body" class="divide-y divide-slate-200">
-                                <!-- Recap rows injected via JS -->
-                            </tbody>
+                            <tbody id="recap-table-body" class="divide-y divide-slate-200"></tbody>
                         </table>
                     </div>
                 </div>
@@ -365,18 +332,12 @@
 
             <!-- Settings View -->
             <div id="view-settings" class="view-section hidden max-w-3xl mx-auto">
-                
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 mb-6">
                     <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2"><i class="fas fa-database text-blue-600 mr-2"></i>Koneksi Google Sheets (Database)</h3>
-                    
-                    <p class="text-sm text-slate-600 mb-4">
-                        Aplikasi ini telah terhubung langsung ke Google Spreadsheet Anda. Jika ingin mengganti URL Web App dengan sheet lain, Anda dapat mengubahnya di bawah.
-                    </p>
-
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-slate-700 mb-1">Google Apps Script Web App URL</label>
                         <div class="flex">
-                            <input type="url" id="gas-url-input" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="flex-1 px-4 py-2 border border-slate-300 rounded-l-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                            <input type="url" id="gas-url-input" class="flex-1 px-4 py-2 border border-slate-300 rounded-l-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                             <button onclick="saveGasUrl()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg text-sm font-medium transition-colors">
                                 Simpan URL
                             </button>
@@ -388,140 +349,107 @@
                      <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2"><i class="fas fa-sliders-h text-blue-600 mr-2"></i>Pengaturan Sistem</h3>
                      <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Jumlah Kolom UH (Maks 10)</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Jumlah UH (Maks 10)</label>
                             <input type="number" id="setting-uh-count" value="4" min="1" max="10" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Jumlah Kolom TH (Maks 10)</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Jumlah TH (Maks 10)</label>
                             <input type="number" id="setting-th-count" value="4" min="1" max="10" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
                         </div>
                         <button onclick="saveSettings()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full">
                             Simpan Pengaturan
                         </button>
-                        
-                        <div class="border-t border-slate-200 mt-6 pt-4">
-                            <button onclick="clearLocalData()" class="text-red-600 hover:text-red-800 text-sm font-medium w-full text-left">
-                                <i class="fas fa-trash-alt mr-2"></i> Hapus Semua Data Lokal (Reset)
-                            </button>
-                        </div>
                      </div>
                 </div>
-
             </div>
 
         </div>
     </main>
 
-    <!-- Add/Edit Student Modal -->
+    <!-- Modal Student & Subject -->
     <div id="student-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 transform transition-all">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4">
             <div class="p-6 border-b border-slate-100 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-slate-800" id="modal-title">Tambah Siswa Baru</h3>
-                <button onclick="closeStudentModal()" class="text-slate-400 hover:text-slate-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+                <button onclick="closeStudentModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times text-xl"></i></button>
             </div>
             <div class="p-6 space-y-4">
                 <input type="hidden" id="student-id">
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">NIS / NISN</label>
-                    <input type="text" id="student-nis" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="Masukkan NIS">
+                    <input type="text" id="student-nis" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
-                    <input type="text" id="student-name" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="Nama Lengkap Siswa">
+                    <input type="text" id="student-name" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Jenis Kelamin</label>
-                    <select id="student-gender" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                    <select id="student-gender" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
                         <option value="L">Laki-laki (L)</option>
                         <option value="P">Perempuan (P)</option>
                     </select>
                 </div>
             </div>
             <div class="p-6 border-t border-slate-100 bg-slate-50 rounded-b-xl flex justify-end space-x-3">
-                <button onclick="closeStudentModal()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-100 transition-colors">Batal</button>
-                <button onclick="saveStudent()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">Simpan</button>
+                <button onclick="closeStudentModal()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm">Batal</button>
+                <button onclick="saveStudent()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm">Simpan</button>
             </div>
         </div>
     </div>
 
-    <!-- Add/Edit Subject Modal -->
     <div id="subject-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 transform transition-all">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4">
             <div class="p-6 border-b border-slate-100 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-slate-800" id="subject-modal-title">Tambah Mata Pelajaran</h3>
-                <button onclick="closeSubjectModal()" class="text-slate-400 hover:text-slate-600">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+                <button onclick="closeSubjectModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times text-xl"></i></button>
             </div>
             <div class="p-6 space-y-4">
                 <input type="hidden" id="subject-id">
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Nama Mata Pelajaran</label>
-                    <input type="text" id="subject-name" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="Cth: Matematika">
+                    <input type="text" id="subject-name" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Materi / Capaian Pembelajaran</label>
-                    <textarea id="subject-target" rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="Deskripsi materi yang harus dicapai..."></textarea>
+                    <textarea id="subject-target" rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm"></textarea>
                 </div>
             </div>
             <div class="p-6 border-t border-slate-100 bg-slate-50 rounded-b-xl flex justify-end space-x-3">
-                <button onclick="closeSubjectModal()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-100 transition-colors">Batal</button>
-                <button onclick="saveSubject()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">Simpan</button>
+                <button onclick="closeSubjectModal()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm">Batal</button>
+                <button onclick="saveSubject()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm">Simpan</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
     <div id="toast">Message goes here</div>
 
     <script>
-        // URL Google Apps Script bawaan (Default Cloud URL)
         const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbwJvX7S3SQzC-0LstOguGukOC2ofqlIYLDIe8pk7uej2gYclvPGQirm1l-ZbOGrWad4Ug/exec';
 
-        // --- State Management ---
         let appData = {
             students: [],
-            subjects: [
-                { id: 'default', name: 'Mata Pelajaran Umum', target: 'Capaian pembelajaran belum ditentukan.' }
-            ],
-            grades: {
-                'default': { uh: {}, th: {}, us: {} }
-            },
-            settings: {
-                uhCount: 4,
-                thCount: 4,
-                gasUrl: DEFAULT_GAS_URL
-            }
+            subjects: [{ id: 'default', name: 'Mata Pelajaran Umum', target: '-' }],
+            grades: { 'default': { uh: {}, th: {}, us: {} } },
+            settings: { uhCount: 4, thCount: 4, gasUrl: DEFAULT_GAS_URL }
         };
 
         let currentGradeTab = 'uh';
         let activeSubjectId = 'default';
         
-        // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
             loadLocalData();
-            
-            // Pastikan URL terpasang otomatis
-            if (!appData.settings.gasUrl) {
-                appData.settings.gasUrl = DEFAULT_GAS_URL;
-            }
-
+            if (!appData.settings.gasUrl) appData.settings.gasUrl = DEFAULT_GAS_URL;
             updateSubjectDropdowns();
             setupNavigation();
             setupKeyboardNavigation();
-            
-            // Ambil data langsung dari Google Spreadsheet saat pertama dibuka
             syncData(true);
 
-            // Bind inputs
             document.getElementById('setting-uh-count').value = appData.settings.uhCount;
             document.getElementById('setting-th-count').value = appData.settings.thCount;
             document.getElementById('gas-url-input').value = appData.settings.gasUrl;
         });
 
-        // --- Navigation ---
         function setupNavigation() {
             const navLinks = document.querySelectorAll('.nav-link');
             const views = document.querySelectorAll('.view-section');
@@ -530,7 +458,6 @@
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    
                     navLinks.forEach(n => {
                         n.classList.remove('bg-blue-50', 'text-blue-600', 'font-semibold', 'border-r-4', 'border-blue-600');
                         n.classList.add('text-slate-600');
@@ -545,9 +472,7 @@
                     const targetView = document.getElementById(`view-${target}`);
                     if(targetView) {
                         targetView.classList.remove('hidden');
-                        if (target === 'grading' || target === 'recap') {
-                            targetView.classList.add('flex');
-                        }
+                        if (target === 'grading' || target === 'recap') targetView.classList.add('flex');
                     }
 
                     pageTitle.innerText = link.innerText.trim();
@@ -563,20 +488,12 @@
             navLinks[0].click();
         }
 
-        // --- Data Persistence (Local & Cloud) ---
         function loadLocalData() {
             const saved = localStorage.getItem('ePenilaianData');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
                     appData = { ...appData, ...parsed };
-                    
-                    if (appData.grades.uh && !appData.subjects) {
-                        const oldGrades = { uh: appData.grades.uh, th: appData.grades.th, us: appData.grades.us };
-                        appData.subjects = [{ id: 'default', name: 'Mata Pelajaran Umum', target: '-' }];
-                        appData.grades = { 'default': oldGrades };
-                    }
-                    
                     if (!appData.subjects || appData.subjects.length === 0) {
                         appData.subjects = [{ id: 'default', name: 'Mata Pelajaran Umum', target: '-' }];
                         appData.grades = { 'default': { uh: {}, th: {}, us: {} } };
@@ -584,7 +501,6 @@
                     if (!activeSubjectId || !appData.subjects.find(s => s.id === activeSubjectId)) {
                         activeSubjectId = appData.subjects[0].id;
                     }
-
                     appData.settings = appData.settings || { uhCount: 4, thCount: 4, gasUrl: DEFAULT_GAS_URL };
                 } catch (e) {
                     console.error("Error loading local data", e);
@@ -597,6 +513,7 @@
             updateDashboardStats();
         }
 
+        // --- SOLUSI UTAMA KONEKSI BISA BERJALAN DENGAN LANCAR ---
         async function syncData(silent = false) {
             let url = (appData.settings.gasUrl || DEFAULT_GAS_URL).trim();
             
@@ -612,7 +529,6 @@
 
             try {
                 if (silent) {
-                    // Fetch data dari Google Sheets (GET)
                     const res = await fetch(url, { method: 'GET' });
                     if(res.ok) {
                         const cloudData = await res.json();
@@ -624,21 +540,20 @@
                                 appData.settings.uhCount = cloudData.settings.uhCount || appData.settings.uhCount;
                                 appData.settings.thCount = cloudData.settings.thCount || appData.settings.thCount;
                             }
-                            
                             if (appData.subjects.length > 0 && !appData.subjects.find(s => s.id === activeSubjectId)) {
                                 activeSubjectId = appData.subjects[0].id;
                             }
-                            
                             saveLocalData();
                         }
                     }
                 } else {
-                    // Push data ke Google Sheets (POST)
-                    const payload = JSON.stringify(appData);
-                    
+                    // Mengirimkan data sebagai text/plain agar tidak memicu isu preflight CORS pada GAS
                     const response = await fetch(url, {
                         method: 'POST',
-                        body: payload
+                        headers: {
+                            'Content-Type': 'text/plain;charset=utf-8'
+                        },
+                        body: JSON.stringify(appData)
                     });
 
                     const result = await response.json();
@@ -648,13 +563,10 @@
                         throw new Error(result.message || "Gagal sinkronisasi");
                     }
                 }
-                
                 updateDbStatus(true);
             } catch (error) {
                 console.error("Sync error:", error);
-                if(!silent) {
-                    showToast("Gagal sinkronisasi data dengan Google Sheets.", "error");
-                }
+                if(!silent) showToast("Gagal sinkronisasi data ke Google Sheets.", "error");
                 updateDbStatus(false);
             } finally {
                 if(!silent) hideLoading();
@@ -673,21 +585,18 @@
         function updateDbStatus(isCloud = false) {
             const indicator = document.getElementById('db-status-indicator');
             const text = document.getElementById('db-status-text');
-            
             if (isCloud) {
-                indicator.style.backgroundColor = '#22c55e'; // Green
+                indicator.style.backgroundColor = '#22c55e';
                 text.innerText = 'Tersinkron (Google Sheets)';
             } else {
-                indicator.style.backgroundColor = '#f59e0b'; // Yellow
+                indicator.style.backgroundColor = '#f59e0b';
                 text.innerText = 'Mode Lokal (Offline)';
             }
         }
 
-        // --- Student Management ---
         function renderStudentTable() {
             const tbody = document.getElementById('student-table-body');
             const searchTerm = document.getElementById('search-student')?.value.toLowerCase() || '';
-            
             tbody.innerHTML = '';
             
             let filteredStudents = appData.students;
@@ -696,13 +605,13 @@
             }
 
             if(filteredStudents.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500">Belum ada data siswa. Silakan tambahkan.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500">Belum ada data siswa.</td></tr>`;
                 return;
             }
 
             filteredStudents.forEach((student, index) => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 border-b border-slate-100 last:border-0 transition-colors";
+                tr.className = "hover:bg-slate-50 border-b border-slate-100 transition-colors";
                 tr.innerHTML = `
                     <td class="p-4 text-sm text-slate-600">${index + 1}</td>
                     <td class="p-4 text-sm font-medium text-slate-800">${student.nis}</td>
@@ -713,12 +622,8 @@
                         </span>
                     </td>
                     <td class="p-4 text-sm text-center space-x-2">
-                        <button onclick="editStudent('${student.id}')" class="text-blue-500 hover:text-blue-700 p-1" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button onclick="deleteStudent('${student.id}')" class="text-red-500 hover:text-red-700 p-1" title="Hapus">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
+                        <button onclick="editStudent('${student.id}')" class="text-blue-500 hover:text-blue-700 p-1"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteStudent('${student.id}')" class="text-red-500 hover:text-red-700 p-1"><i class="fas fa-trash-alt"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -753,14 +658,10 @@
 
             if(id) {
                 const index = appData.students.findIndex(s => s.id === id);
-                if(index > -1) {
-                    appData.students[index] = { id, nis, name, gender };
-                    showToast("Data siswa diperbarui");
-                }
+                if(index > -1) appData.students[index] = { id, nis, name, gender };
             } else {
-                const newId = 'std_' + Date.now().toString(36) + Math.random().toString(36).substr(2);
+                const newId = 'std_' + Date.now().toString(36);
                 appData.students.push({ id: newId, nis, name, gender });
-                showToast("Siswa berhasil ditambahkan");
             }
 
             saveLocalData();
@@ -783,20 +684,16 @@
 
         function deleteStudent(id) {
             appData.students = appData.students.filter(s => s.id !== id);
-            
             Object.keys(appData.grades).forEach(subjId => {
                 delete appData.grades[subjId].uh[id];
                 delete appData.grades[subjId].th[id];
                 delete appData.grades[subjId].us[id];
             });
-            
             saveLocalData();
             renderStudentTable();
-            showToast("Siswa dihapus");
             syncData();
         }
 
-        // --- Subject Management ---
         function updateSubjectDropdowns() {
             const selects = document.querySelectorAll('.subject-select');
             selects.forEach(select => {
@@ -814,7 +711,6 @@
         function changeActiveSubject(id) {
             activeSubjectId = id;
             updateSubjectDropdowns();
-            
             const activeNav = document.querySelector('.nav-link.bg-blue-50')?.getAttribute('data-target');
             if(activeNav === 'grading') renderGradingTable();
             if(activeNav === 'recap') renderRecapTable();
@@ -823,7 +719,6 @@
         function renderSubjectTable() {
             const tbody = document.getElementById('subject-table-body');
             const searchTerm = document.getElementById('search-subject')?.value.toLowerCase() || '';
-            
             tbody.innerHTML = '';
             
             let filteredSubjects = appData.subjects;
@@ -832,7 +727,7 @@
             }
 
             if(filteredSubjects.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-500">Belum ada mata pelajaran. Silakan tambahkan.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-500">Belum ada mata pelajaran.</td></tr>`;
                 return;
             }
 
@@ -844,19 +739,13 @@
                     <td class="p-4 text-sm font-bold text-blue-700">${subj.name}</td>
                     <td class="p-4 text-sm text-slate-600 line-clamp-2">${subj.target || '-'}</td>
                     <td class="p-4 text-sm text-center space-x-2">
-                        <button onclick="editSubject('${subj.id}')" class="text-blue-500 hover:text-blue-700 p-1" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button onclick="deleteSubject('${subj.id}')" class="text-red-500 hover:text-red-700 p-1" title="Hapus">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
+                        <button onclick="editSubject('${subj.id}')" class="text-blue-500 hover:text-blue-700 p-1"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteSubject('${subj.id}')" class="text-red-500 hover:text-red-700 p-1"><i class="fas fa-trash-alt"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
-
-        document.getElementById('search-subject')?.addEventListener('input', renderSubjectTable);
 
         function openAddSubjectModal() {
             document.getElementById('subject-modal-title').innerText = 'Tambah Mata Pelajaran';
@@ -882,23 +771,12 @@
 
             if(id) {
                 const index = appData.subjects.findIndex(s => s.id === id);
-                if(index > -1) {
-                    appData.subjects[index] = { id, name, target };
-                    showToast("Mata Pelajaran diperbarui");
-                }
+                if(index > -1) appData.subjects[index] = { id, name, target };
             } else {
                 const newId = 'sub_' + Date.now().toString(36);
                 appData.subjects.push({ id: newId, name, target });
                 appData.grades[newId] = { uh: {}, th: {}, us: {} };
-                
-                if (appData.subjects.length === 2 && appData.subjects[0].id === 'default' && !Object.keys(appData.grades['default'].us).length) {
-                    appData.subjects.shift();
-                    delete appData.grades['default'];
-                    activeSubjectId = newId;
-                } else if (appData.subjects.length === 1) {
-                    activeSubjectId = newId;
-                }
-                showToast("Mata Pelajaran ditambahkan");
+                activeSubjectId = newId;
             }
 
             updateSubjectDropdowns();
@@ -924,37 +802,28 @@
                 showToast("Minimal harus ada 1 mata pelajaran", "error");
                 return;
             }
-            
             appData.subjects = appData.subjects.filter(s => s.id !== id);
             delete appData.grades[id];
-            
-            if (activeSubjectId === id) {
-                activeSubjectId = appData.subjects[0].id;
-            }
+            if (activeSubjectId === id) activeSubjectId = appData.subjects[0].id;
             
             updateSubjectDropdowns();
             saveLocalData();
             renderSubjectTable();
-            showToast("Mata Pelajaran dihapus");
             syncData();
         }
 
-        // --- Grading System ---
         function switchGradeTab(tab) {
             currentGradeTab = tab;
-            
             const buttons = document.querySelectorAll('#view-grading button[onclick^="switchGradeTab"]');
             buttons.forEach(btn => {
                 btn.classList.remove('tab-active', 'text-blue-600');
                 btn.classList.add('text-slate-500');
             });
-            
             const activeBtn = Array.from(buttons).find(b => b.getAttribute('onclick').includes(tab));
             if(activeBtn) {
                 activeBtn.classList.remove('text-slate-500');
                 activeBtn.classList.add('tab-active', 'text-blue-600');
             }
-
             renderGradingTable();
         }
 
@@ -970,7 +839,7 @@
 
             let headersHTML = `
                 <th class="p-3 font-semibold text-slate-600 text-sm w-12 text-center border-r border-slate-200 bg-slate-50 sticky left-0 z-10">No</th>
-                <th class="p-3 font-semibold text-slate-600 text-sm border-r border-slate-200 bg-slate-50 sticky left-[48px] z-10 min-w-[200px] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Nama Siswa</th>
+                <th class="p-3 font-semibold text-slate-600 text-sm border-r border-slate-200 bg-slate-50 sticky left-[48px] z-10 min-w-[200px]">Nama Siswa</th>
             `;
 
             let colCount = 1;
@@ -981,34 +850,26 @@
                 headersHTML += `<th class="p-3 font-semibold text-slate-600 text-sm text-center min-w-[100px]">Nilai Ujian Semester</th>`;
             } else {
                 for (let i = 1; i <= colCount; i++) {
-                    const label = currentGradeTab.toUpperCase() + '-' + i;
-                    headersHTML += `<th class="p-3 font-semibold text-slate-600 text-sm text-center w-24 border-r border-slate-100">${label}</th>`;
+                    headersHTML += `<th class="p-3 font-semibold text-slate-600 text-sm text-center w-24 border-r border-slate-100">${currentGradeTab.toUpperCase()}-${i}</th>`;
                 }
                 headersHTML += `<th class="p-3 font-semibold text-slate-700 text-sm text-center w-24 bg-slate-100">Rata-rata</th>`;
             }
             thead.innerHTML = headersHTML;
 
             tbody.innerHTML = '';
-            
-            if (!appData.grades[activeSubjectId]) {
-                appData.grades[activeSubjectId] = { uh: {}, th: {}, us: {} };
-            }
+            if (!appData.grades[activeSubjectId]) appData.grades[activeSubjectId] = { uh: {}, th: {}, us: {} };
 
             appData.students.forEach((student, index) => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-blue-50/50 border-b border-slate-100 transition-colors group";
                 
                 let rowHTML = `
-                    <td class="p-2 text-sm text-slate-500 text-center border-r border-slate-100 bg-white group-hover:bg-blue-50/50 sticky left-0 z-10">${index + 1}</td>
-                    <td class="p-2 text-sm font-medium text-slate-800 border-r border-slate-100 bg-white group-hover:bg-blue-50/50 sticky left-[48px] z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] truncate">${student.name}</td>
+                    <td class="p-2 text-sm text-slate-500 text-center border-r border-slate-100 bg-white sticky left-0 z-10">${index + 1}</td>
+                    <td class="p-2 text-sm font-medium text-slate-800 border-r border-slate-100 bg-white sticky left-[48px] z-10 truncate">${student.name}</td>
                 `;
 
                 if (!appData.grades[activeSubjectId][currentGradeTab][student.id]) {
-                    if (currentGradeTab === 'us') {
-                        appData.grades[activeSubjectId][currentGradeTab][student.id] = '';
-                    } else {
-                        appData.grades[activeSubjectId][currentGradeTab][student.id] = Array(colCount).fill('');
-                    }
+                    appData.grades[activeSubjectId][currentGradeTab][student.id] = currentGradeTab === 'us' ? '' : Array(colCount).fill('');
                 }
 
                 const studentGrades = appData.grades[activeSubjectId][currentGradeTab][student.id];
@@ -1022,16 +883,10 @@
                         </td>
                     `;
                 } else {
-                    let total = 0;
-                    let count = 0;
-                    
+                    let total = 0, count = 0;
                     for (let i = 0; i < colCount; i++) {
                         const val = studentGrades[i] || '';
-                        if(val !== '') {
-                            total += parseFloat(val);
-                            count++;
-                        }
-                        
+                        if(val !== '') { total += parseFloat(val); count++; }
                         rowHTML += `
                             <td class="p-1 border-r border-slate-100">
                                 <input type="number" min="0" max="100" class="grade-input" 
@@ -1040,9 +895,8 @@
                             </td>
                         `;
                     }
-                    
                     const avg = count > 0 ? (total / count).toFixed(1) : '-';
-                    rowHTML += `<td class="p-2 text-center text-sm font-bold text-slate-700 bg-slate-50 group-hover:bg-blue-100/50" id="avg-${student.id}">${avg}</td>`;
+                    rowHTML += `<td class="p-2 text-center text-sm font-bold text-slate-700 bg-slate-50" id="avg-${student.id}">${avg}</td>`;
                 }
 
                 tr.innerHTML = rowHTML;
@@ -1079,9 +933,7 @@
                     if (val !== '') { total += parseFloat(val); count++; }
                 });
                 const avgCell = document.getElementById(`avg-${studentId}`);
-                if (avgCell) {
-                    avgCell.innerText = count > 0 ? (total / count).toFixed(1) : '-';
-                }
+                if (avgCell) avgCell.innerText = count > 0 ? (total / count).toFixed(1) : '-';
             }
 
             saveLocalData();
@@ -1093,13 +945,11 @@
                     const inputs = Array.from(document.querySelectorAll('.grade-input'));
                     const currentIndex = inputs.indexOf(e.target);
                     const cols = currentGradeTab === 'us' ? 1 : (currentGradeTab === 'uh' ? appData.settings.uhCount : appData.settings.thCount);
-                    
                     let nextIndex = -1;
 
                     switch(e.key) {
                         case 'ArrowUp': nextIndex = currentIndex - cols; break;
-                        case 'ArrowDown': 
-                        case 'Enter': nextIndex = currentIndex + cols; break;
+                        case 'ArrowDown': case 'Enter': nextIndex = currentIndex + cols; break;
                         case 'ArrowLeft': nextIndex = currentIndex - 1; break;
                         case 'ArrowRight': nextIndex = currentIndex + 1; break;
                     }
@@ -1118,7 +968,6 @@
             syncData();
         }
 
-        // --- Recap & Calculations ---
         function calculateAverages(studentId) {
             const getAvg = (type) => {
                 const grades = (appData.grades[activeSubjectId] && appData.grades[activeSubjectId][type][studentId]) ? appData.grades[activeSubjectId][type][studentId] : [];
@@ -1133,8 +982,7 @@
 
             const finalGrade = (uhAvg * 0.3) + (thAvg * 0.2) + (usVal * 0.5);
             
-            let predikat = 'E';
-            let predColor = 'text-red-600 bg-red-100';
+            let predikat = 'E', predColor = 'text-red-600 bg-red-100';
             if (finalGrade >= 90) { predikat = 'A'; predColor = 'text-emerald-700 bg-emerald-100'; }
             else if (finalGrade >= 80) { predikat = 'B'; predColor = 'text-blue-700 bg-blue-100'; }
             else if (finalGrade >= 70) { predikat = 'C'; predColor = 'text-yellow-700 bg-yellow-100'; }
@@ -1154,20 +1002,17 @@
 
             const activeSubject = appData.subjects.find(s => s.id === activeSubjectId);
             const subjectName = activeSubject ? activeSubject.name : '-';
-
             const sortedStudents = [...appData.students].sort((a,b) => a.name.localeCompare(b.name));
 
             sortedStudents.forEach((student, index) => {
                 const stats = calculateAverages(student.id);
-                
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 border-b border-slate-100";
-                
                 tr.innerHTML = `
                     <td class="p-3 text-sm text-slate-500 text-center border-r border-slate-100">${index + 1}</td>
                     <td class="p-3 text-sm font-medium text-slate-800 border-r border-slate-100">${student.name}</td>
                     <td class="p-3 text-sm text-slate-500 text-center border-r border-slate-100">${student.gender}</td>
-                    <td class="p-3 text-sm text-slate-700 font-medium border-r border-slate-100 bg-slate-50 truncate max-w-[120px]" title="${subjectName}">${subjectName}</td>
+                    <td class="p-3 text-sm text-slate-700 font-medium border-r border-slate-100 bg-slate-50 truncate max-w-[120px]">${subjectName}</td>
                     <td class="p-3 text-sm text-slate-700 text-center border-r border-slate-100 bg-blue-50/30">${stats.uhAvg.toFixed(1)}</td>
                     <td class="p-3 text-sm text-slate-700 text-center border-r border-slate-100 bg-green-50/30">${stats.thAvg.toFixed(1)}</td>
                     <td class="p-3 text-sm text-slate-700 text-center border-r border-slate-100 bg-orange-50/30">${stats.usVal.toFixed(1)}</td>
@@ -1181,40 +1026,19 @@
         }
 
         function exportToCSV() {
-            if(appData.students.length === 0) {
-                showToast("Tidak ada data untuk diexport", "error");
-                return;
-            }
-
+            if(appData.students.length === 0) return showToast("Tidak ada data", "error");
             const activeSubject = appData.subjects.find(s => s.id === activeSubjectId);
             const subjectName = activeSubject ? activeSubject.name : '-';
 
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "No,NIS,Nama Lengkap,L/P,Mata Pelajaran,Rata-rata UH,Rata-rata TH,Nilai US,Nilai Akhir,Predikat\n";
-
-            const sortedStudents = [...appData.students].sort((a,b) => a.name.localeCompare(b.name));
-
-            sortedStudents.forEach((student, index) => {
+            let csvContent = "data:text/csv;charset=utf-8,No,NIS,Nama Lengkap,L/P,Mata Pelajaran,Rata-rata UH,Rata-rata TH,Nilai US,Nilai Akhir,Predikat\n";
+            [...appData.students].sort((a,b) => a.name.localeCompare(b.name)).forEach((student, index) => {
                 const stats = calculateAverages(student.id);
-                const row = [
-                    index + 1,
-                    `"${student.nis}"`,
-                    `"${student.name}"`,
-                    student.gender,
-                    `"${subjectName}"`,
-                    stats.uhAvg.toFixed(2),
-                    stats.thAvg.toFixed(2),
-                    stats.usVal.toFixed(2),
-                    stats.finalGrade.toFixed(2),
-                    stats.predikat
-                ];
-                csvContent += row.join(",") + "\n";
+                csvContent += [index + 1, `"${student.nis}"`, `"${student.name}"`, student.gender, `"${subjectName}"`, stats.uhAvg.toFixed(2), stats.thAvg.toFixed(2), stats.usVal.toFixed(2), stats.finalGrade.toFixed(2), stats.predikat].join(",") + "\n";
             });
 
-            const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Rekap_Nilai_Siswa.csv");
+            link.setAttribute("href", encodeURI(csvContent));
+            link.setAttribute("download", "Rekap_Nilai.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -1222,7 +1046,6 @@
 
         function updateDashboardStats() {
             if(!appData.students) return;
-            
             const totalStudents = appData.students.length;
             document.getElementById('stat-total-students').innerText = totalStudents;
 
@@ -1232,87 +1055,33 @@
                 return;
             }
 
-            let totalClassGrade = 0;
-            let highestGrade = 0;
-
+            let totalClassGrade = 0, highestGrade = 0;
             appData.students.forEach(s => {
                 const stats = calculateAverages(s.id);
                 totalClassGrade += stats.finalGrade;
                 if (stats.finalGrade > highestGrade) highestGrade = stats.finalGrade;
             });
 
-            const classAvg = totalClassGrade / totalStudents;
-            document.getElementById('stat-class-average').innerText = classAvg.toFixed(2);
+            document.getElementById('stat-class-average').innerText = (totalClassGrade / totalStudents).toFixed(2);
             document.getElementById('stat-highest-grade').innerText = highestGrade.toFixed(1);
         }
 
-        // --- Settings & Utils ---
         function saveSettings() {
             appData.settings.uhCount = parseInt(document.getElementById('setting-uh-count').value) || 4;
             appData.settings.thCount = parseInt(document.getElementById('setting-th-count').value) || 4;
-            
-            appData.students.forEach(s => {
-                Object.keys(appData.grades).forEach(subjId => {
-                    const uh = appData.grades[subjId].uh[s.id] || [];
-                    const th = appData.grades[subjId].th[s.id] || [];
-                    
-                    appData.grades[subjId].uh[s.id] = Array.from({length: appData.settings.uhCount}, (_, i) => uh[i] !== undefined ? uh[i] : '');
-                    appData.grades[subjId].th[s.id] = Array.from({length: appData.settings.thCount}, (_, i) => th[i] !== undefined ? th[i] : '');
-                });
-            });
-
             saveLocalData();
-            showToast("Pengaturan berhasil disimpan");
+            showToast("Pengaturan disimpan");
             syncData();
         }
 
         function saveGasUrl() {
             let url = document.getElementById('gas-url-input').value.trim();
-            
-            if (url.endsWith('/edit')) {
-                url = url.replace('/edit', '/exec');
-                document.getElementById('gas-url-input').value = url;
-            }
-
+            if (url.endsWith('/edit')) url = url.replace('/edit', '/exec');
             appData.settings.gasUrl = url || DEFAULT_GAS_URL;
             saveLocalData();
             syncData();
         }
 
-        function clearLocalData() {
-            let btn = event.currentTarget;
-            if(btn.innerText.includes("Yakin?")) {
-                localStorage.removeItem('ePenilaianData');
-                appData = { 
-                    students: [], 
-                    subjects: [{ id: 'default', name: 'Mata Pelajaran Umum', target: '-' }],
-                    grades: { 'default': { uh: {}, th: {}, us: {} } }, 
-                    settings: { uhCount: 4, thCount: 4, gasUrl: DEFAULT_GAS_URL } 
-                };
-                activeSubjectId = 'default';
-                btn.innerHTML = `<i class="fas fa-trash-alt mr-2"></i> Hapus Semua Data Lokal (Reset)`;
-                btn.classList.remove('text-red-800', 'font-bold');
-                
-                document.getElementById('setting-uh-count').value = 4;
-                document.getElementById('setting-th-count').value = 4;
-                document.getElementById('gas-url-input').value = DEFAULT_GAS_URL;
-                
-                updateSubjectDropdowns();
-                saveLocalData();
-                showToast("Semua data telah direset.");
-                
-                document.querySelector('.nav-link.bg-blue-50').click();
-            } else {
-                btn.innerText = "Yakin? Klik lagi untuk menghapus permanen!";
-                btn.classList.add('text-red-800', 'font-bold');
-                setTimeout(() => {
-                    btn.innerHTML = `<i class="fas fa-trash-alt mr-2"></i> Hapus Semua Data Lokal (Reset)`;
-                    btn.classList.remove('text-red-800', 'font-bold');
-                }, 3000);
-            }
-        }
-
-        // --- UI Helpers ---
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             toast.innerText = message;
@@ -1330,37 +1099,10 @@
             document.getElementById('loading-overlay').classList.add('hidden');
         }
 
-        // Mobile Menu Toggle
         document.getElementById('mobile-menu-btn').addEventListener('click', () => {
             const sidebar = document.getElementById('sidebar');
-            if (sidebar.style.transform === 'translateX(0px)') {
-                sidebar.style.transform = 'translateX(-100%)';
-            } else {
-                sidebar.style.transform = 'translateX(0px)';
-                sidebar.classList.add('absolute', 'z-50', 'h-full', 'shadow-2xl');
-            }
+            sidebar.style.transform = sidebar.style.transform === 'translateX(0px)' ? 'translateX(-100%)' : 'translateX(0px)';
         });
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                if(window.innerWidth < 768) {
-                    document.getElementById('sidebar').style.transform = 'translateX(-100%)';
-                }
-            });
-        });
-        
-        window.addEventListener('resize', () => {
-            const sidebar = document.getElementById('sidebar');
-            if(window.innerWidth >= 768) {
-                sidebar.style.transform = '';
-                sidebar.classList.remove('absolute', 'z-50', 'h-full', 'shadow-2xl');
-            } else if (sidebar.style.transform === '') {
-                sidebar.style.transform = 'translateX(-100%)';
-            }
-        });
-        if(window.innerWidth < 768) {
-            document.getElementById('sidebar').style.transform = 'translateX(-100%)';
-        }
     </script>
 </body>
 </html>
